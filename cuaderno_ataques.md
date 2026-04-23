@@ -1,7 +1,5 @@
 # Cuaderno de Ataques
 **Sistema Clínica Veterinaria · Corte 3**  
-**Alumno:** Tu nombre  
-**Matrícula:** Tu matrícula  
 
 ---
 
@@ -24,7 +22,7 @@ de nombre. El atacante esperaría ver todas las mascotas del sistema.
 **Resultado:** 0 resultados. El sistema devuelve "No se encontraron
 mascotas". La tabla no fue afectada.
 
-[SCREENSHOT — campo con ' OR '1'='1 y tabla vacía]
+![screenshot1](screenshots/screenshot1.png)
 
 **Línea que defendió — `pages/api/mascotas.ts`, línea 30:**
 ```typescript
@@ -61,7 +59,7 @@ completamente.
 **Resultado:** 0 resultados. La tabla `mascotas` sigue intacta. El sistema
 devuelve "No se encontraron mascotas".
 
-[SCREENSHOT — campo con '; DROP TABLE mascotas; -- y tabla vacía]
+![screenshot2](screenshots/screenshot2.png)
 
 **Verificación adicional — la tabla sigue existiendo:**
 
@@ -90,7 +88,7 @@ información sensible como la cédula profesional.
 **Resultado:** 0 resultados. No se expuso ningún dato de la tabla
 veterinarios.
 
-[SCREENSHOT — campo con el UNION y tabla vacía]
+![screenshot3](screenshots/screenshot3.png)
 
 **Línea que defendió — `pages/api/mascotas.ts`, línea 30:**  
 El input completo incluyendo `UNION SELECT...` se envía como valor
@@ -116,8 +114,7 @@ Endpoint: `GET /api/mascotas?rol=veterinario&vet_id=1`
 No puede ver las mascotas de otros veterinarios aunque haga
 un SELECT sin filtros.
 
-[SCREENSHOT — pantalla de mascotas con Dr. López mostrando
-Firulais, Max, Toby · 3 resultado(s)]
+![screenshot4](screenshots/screenshot4.png)
 
 ### Dra. García hace la misma consulta
 
@@ -127,8 +124,7 @@ Endpoint: `GET /api/mascotas?rol=veterinario&vet_id=2`
 **Resultado:** Solo ve sus 3 mascotas — Dante, Luna, Misifú.
 Conjunto completamente distinto al del Dr. López.
 
-[SCREENSHOT — pantalla de mascotas con Dra. García mostrando
-Dante, Luna, Misifú · 3 resultado(s)]
+![screenshot5](screenshots/screenshot5.png)
 
 ### Política RLS que produce este comportamiento
 
@@ -183,7 +179,7 @@ El caché no tiene datos → consulta la BD → guarda resultado en Redis.
 
 **En el frontend:** badge amarillo `CACHE MISS · 68ms`
 
-[SCREENSHOT — pantalla vacunación pendiente con badge CACHE MISS]
+![screenshot6](screenshots/screenshot6.png)
 
 ---
 
@@ -198,7 +194,7 @@ El caché tiene los datos → los devuelve directamente desde Redis.
 
 **En el frontend:** badge verde `CACHE HIT · ~5ms`
 
-[SCREENSHOT — pantalla vacunación pendiente con badge CACHE HIT]
+![screenshot7](screenshots/screenshot7.png)
 
 ---
 
@@ -226,7 +222,7 @@ await redis.del(CACHE_KEY);
 console.log('[CACHE INVALIDADO] vacunacion_pendiente — se aplicó una vacuna nueva');
 ```
 
-[SCREENSHOT — log de consola mostrando CACHE INVALIDADO]
+![screenshot8](screenshots/screenshot8.png)
 
 ---
 
@@ -243,7 +239,7 @@ El caché fue borrado → consulta la BD de nuevo.
 
 **En el frontend:** badge amarillo `CACHE MISS` de nuevo.
 
-[SCREENSHOT — badge CACHE MISS después de invalidación]
+![screenshot9](screenshots/screenshot9.png)
 
 ---
 
