@@ -13,8 +13,18 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./schema_corte3.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./backend/01_procedures.sql:/docker-entrypoint-initdb.d/02_procedures.sql
+      - ./backend/02_triggers.sql:/docker-entrypoint-initdb.d/03_triggers.sql
+      - ./backend/03_views.sql:/docker-entrypoint-initdb.d/04_views.sql
+      - ./backend/04_roles_y_permisos.sql:/docker-entrypoint-initdb.d/05_roles.sql
+      - ./backend/05_rls.sql:/docker-entrypoint-initdb.d/06_rls.sql
     networks:
       - clinica_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d clinica_vet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7
@@ -30,11 +40,17 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: postgres://admin:admin123@postgres:5432/clinica_vet
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: clinica_vet
+      DB_USER: app_user
+      DB_PASSWORD: app123
       REDIS_URL: redis://redis:6379
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
     networks:
       - clinica_net
 
