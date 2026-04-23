@@ -22,6 +22,7 @@ SQL Injection en toda la capa HTTP.
 - **Caché:** Redis 7
 - **Contenedores:** Docker Compose
 
+```
 corte3-bda-{matricula}/
 ├── README.md
 ├── cuaderno_ataques.md
@@ -34,15 +35,16 @@ corte3-bda-{matricula}/
 │   ├── 04_roles_y_permisos.sql
 │   └── 05_rls.sql
 └── app/  ← proyecto Next.js
-├── pages/
-│   ├── index.tsx        (login)
-│   ├── mascotas.tsx     (búsqueda)
-│   └── vacunacion.tsx   (vacunación pendiente)
-└── pages/api/
-├── mascotas.ts
-├── vacunacion.ts
-├── citas.ts
-└── vacunas.ts
+    ├── pages/
+    │   ├── index.tsx        (login)
+    │   ├── mascotas.tsx     (búsqueda)
+    │   └── vacunacion.tsx   (vacunación pendiente)
+    └── pages/api/
+        ├── mascotas.ts
+        ├── vacunacion.ts
+        ├── citas.ts
+        └── vacunas.ts
+```
 
 ---
 
