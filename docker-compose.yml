@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: clinica_postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: clinica_vet
+    ports:
+      - "5441:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./schema_corte3.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    networks:
+      - clinica_net
+
+  redis:
+    image: redis:7
+    container_name: clinica_redis
+    ports:
+      - "6380:6379"
+    networks:
+      - clinica_net
+
+  app:
+    build: .
+    container_name: clinica_app
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://admin:admin123@postgres:5432/clinica_vet
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - clinica_net
+
+volumes:
+  postgres_data:
+
+networks:
+  clinica_net:
