@@ -8,6 +8,14 @@ const CACHE_TTL = 300;
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') return res.status(405).end();
 
+  const { rol } = req.query;
+
+  if (rol === 'recepcion') {
+    return res.status(403).json({
+      error: 'Acceso denegado — recepción no tiene permisos para ver vacunación'
+    });
+  }
+
   try {
     const cached = await redis.get(CACHE_KEY);
 

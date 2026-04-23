@@ -30,7 +30,7 @@ export default function Vacunacion() {
     const start = Date.now();
 
     try {
-      const res = await fetch('/api/vacunacion');
+      const res = await fetch(`/api/vacunacion?rol=${usuario?.rol}`);
       const json = await res.json();
 
       setData(json.data || []);
