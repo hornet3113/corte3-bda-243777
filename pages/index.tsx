@@ -15,47 +15,73 @@ export default function Login() {
 
   const handleLogin = () => {
     if (!seleccion) return alert('Selecciona un usuario');
-
     const usuario = USUARIOS.find(u => u.value === seleccion)!;
-
-    // Guardar en sessionStorage para usarlo en las otras pantallas
     sessionStorage.setItem('usuario', JSON.stringify(usuario));
-
     router.push('/mascotas');
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <div className="bg-gray-800 p-8 rounded-lg w-full max-w-md">
-        <h1 className="text-white text-2xl font-bold mb-2">
-          Clínica Veterinaria
-        </h1>
-        <p className="text-gray-400 text-sm mb-6">
-          Sistema de gestión — Selecciona tu perfil
-        </p>
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#FFF8EE' }}>
+      <div className="flex w-full max-w-5xl rounded-2xl shadow-xl overflow-hidden bg-white">
 
-        <label className="text-gray-300 text-sm mb-2 block">
-          Usuario
-        </label>
-        <select
-          value={seleccion}
-          onChange={e => setSeleccion(e.target.value)}
-          className="w-full bg-gray-700 text-white border border-gray-600 rounded px-3 py-2 mb-6"
+        {/* Panel izquierdo */}
+        <div
+          className="relative w-2/5 flex flex-col justify-between p-8 overflow-hidden"
+          style={{ backgroundColor: '#FFF0C2' }}
         >
-          <option value="">-- Selecciona --</option>
-          {USUARIOS.map(u => (
-            <option key={u.value} value={u.value}>
-              {u.label}
-            </option>
-          ))}
-        </select>
+          {/* Círculos decorativos */}
+          <div className="absolute top-10 left-6 w-20 h-20 rounded-full border-4 opacity-50" style={{ borderColor: '#E8B800' }} />
+          <div className="absolute bottom-20 right-4 w-14 h-14 rounded-full border-4 opacity-50" style={{ borderColor: '#E8B800' }} />
+          <div className="absolute top-1/3 right-10 w-4 h-4 rounded-full bg-white opacity-70" />
+          <div className="absolute top-16 right-1/3 w-3 h-3 rounded-full bg-white opacity-70" />
 
-        <button
-          onClick={handleLogin}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded"
-        >
-          Ingresar
-        </button>
+          {/* Texto superior */}
+          <div className="relative z-10">
+            <h2 className="text-xl font-bold text-gray-800 leading-snug">
+              Bienvenido a<br />
+              <span style={{ color: '#E8A800' }}>Clínica Veterinaria</span>
+            </h2>
+            <p className="text-xs text-gray-500 mt-1">Para una mejor atención de tus mascotas</p>
+          </div>
+
+          {/* Imagen del perro — pon tu archivo en public/dog.png */}
+          <div className="relative z-10 flex items-end justify-center" style={{ minHeight: '300px' }}>
+            <img
+              src="/dog.png"
+              alt="mascota"
+              className="w-full object-contain"
+              style={{ maxHeight: '360px' }}
+            />
+          </div>
+        </div>
+
+        {/* Panel derecho */}
+        <div className="flex-1 flex flex-col items-center justify-center px-10 py-14">
+          <h1 className="text-2xl font-bold text-gray-800 mb-8">Selecciona tu perfil</h1>
+
+          <div className="w-full mb-5">
+            <select
+              value={seleccion}
+              onChange={e => setSeleccion(e.target.value)}
+              className="w-full rounded-lg px-4 py-3 text-gray-600 focus:outline-none focus:ring-2"
+              style={{ backgroundColor: '#F5F5F5', focusRingColor: '#F5C800' } as React.CSSProperties}
+            >
+              <option value="">-- Selecciona un usuario --</option>
+              {USUARIOS.map(u => (
+                <option key={u.value} value={u.value}>{u.label}</option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            onClick={handleLogin}
+            className="w-full font-semibold py-3 rounded-lg text-white transition-opacity hover:opacity-90"
+            style={{ backgroundColor: '#F5C800' }}
+          >
+            🐾 Ingresar
+          </button>
+        </div>
+
       </div>
     </div>
   );

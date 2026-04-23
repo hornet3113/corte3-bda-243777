@@ -55,95 +55,96 @@ export default function Mascotas() {
     }
   };
 
-  // Cargar mascotas al entrar
   useEffect(() => {
     if (usuario) buscarMascotas();
   }, [usuario]);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
+    <div className="min-h-screen p-6" style={{ backgroundColor: '#FFF8EE' }}>
+
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Mascotas</h1>
-          <p className="text-gray-400 text-sm">
-            {usuario?.label} · {usuario?.rol}
-          </p>
+          <h1 className="text-2xl font-bold text-gray-800">Mascotas</h1>
+          <p className="text-sm text-gray-500">{usuario?.label} · {usuario?.rol}</p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => router.push('/vacunacion')}
-            className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm"
+            className="px-4 py-2 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            style={{ backgroundColor: '#F5C800' }}
           >
             Vacunación Pendiente
           </button>
           <button
             onClick={() => { sessionStorage.clear(); router.push('/'); }}
-            className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded text-sm"
+            className="px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 bg-white border border-gray-200 hover:bg-gray-50"
           >
             Cerrar sesión
           </button>
         </div>
       </div>
 
-      {/* Búsqueda — superficie principal para SQL injection */}
+      {/* Búsqueda */}
       <div className="flex gap-2 mb-6">
         <input
           type="text"
           value={busqueda}
           onChange={e => setBusqueda(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && buscarMascotas()}
-          placeholder="Buscar por nombre... (prueba: ' OR '1'='1)"
-          className="flex-1 bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+          placeholder="Buscar por nombre de mascota..."
+          className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2"
+          style={{ focusRingColor: '#F5C800' } as React.CSSProperties}
         />
         <button
           onClick={buscarMascotas}
           disabled={loading}
-          className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded font-semibold"
+          className="px-6 py-2 rounded-lg font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+          style={{ backgroundColor: '#F5C800' }}
         >
           {loading ? 'Buscando...' : 'Buscar'}
         </button>
       </div>
 
       {error && (
-        <div className="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded mb-4">
+        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
           Error: {error}
         </div>
       )}
 
-      {/* Tabla de resultados */}
-      <div className="bg-gray-800 rounded-lg overflow-hidden">
+      {/* Tabla */}
+      <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
         <table className="w-full">
           <thead>
-            <tr className="bg-gray-700 text-gray-300 text-sm">
-              <th className="text-left px-4 py-3">ID</th>
-              <th className="text-left px-4 py-3">Nombre</th>
-              <th className="text-left px-4 py-3">Especie</th>
-              <th className="text-left px-4 py-3">Dueño</th>
-              <th className="text-left px-4 py-3">Teléfono</th>
+            <tr className="text-sm text-gray-600" style={{ backgroundColor: '#FFF0C2' }}>
+              <th className="text-left px-4 py-3 font-semibold">ID</th>
+              <th className="text-left px-4 py-3 font-semibold">Nombre</th>
+              <th className="text-left px-4 py-3 font-semibold">Especie</th>
+              <th className="text-left px-4 py-3 font-semibold">Dueño</th>
+              <th className="text-left px-4 py-3 font-semibold">Teléfono</th>
             </tr>
           </thead>
           <tbody>
             {mascotas.length === 0 ? (
               <tr>
-                <td colSpan={5} className="text-center text-gray-500 py-8">
+                <td colSpan={5} className="text-center text-gray-400 py-10">
                   {loading ? 'Cargando...' : 'No se encontraron mascotas'}
                 </td>
               </tr>
             ) : (
               mascotas.map(m => (
-                <tr key={m.id} className="border-t border-gray-700 hover:bg-gray-750">
-                  <td className="px-4 py-3 text-gray-400">{m.id}</td>
-                  <td className="px-4 py-3 font-medium">{m.nombre}</td>
-                  <td className="px-4 py-3 text-gray-300">{m.especie}</td>
-                  <td className="px-4 py-3 text-gray-300">{m.dueno}</td>
-                  <td className="px-4 py-3 text-gray-400">{m.telefono}</td>
+                <tr key={m.id} className="border-t border-gray-100 hover:bg-amber-50 transition-colors">
+                  <td className="px-4 py-3 text-gray-400 text-sm">{m.id}</td>
+                  <td className="px-4 py-3 font-medium text-gray-800">{m.nombre}</td>
+                  <td className="px-4 py-3 text-gray-600">{m.especie}</td>
+                  <td className="px-4 py-3 text-gray-600">{m.dueno}</td>
+                  <td className="px-4 py-3 text-gray-500">{m.telefono}</td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
-        <div className="px-4 py-2 text-gray-500 text-sm border-t border-gray-700">
+        <div className="px-4 py-2 text-gray-400 text-sm border-t border-gray-100">
           {mascotas.length} resultado(s)
         </div>
       </div>
