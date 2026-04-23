@@ -59,6 +59,39 @@ export default function Mascotas() {
     if (usuario) buscarMascotas();
   }, [usuario]);
 
+  const [mostrarFormVacuna, setMostrarFormVacuna] = useState(false);
+  const [vacunaForm, setVacunaForm] = useState({
+    mascota_id: '',
+    vacuna_id: '',
+    costo_cobrado: ''
+  });
+  const [msgVacuna, setMsgVacuna] = useState('');
+
+  const aplicarVacuna = async () => {
+    if (!vacunaForm.mascota_id || !vacunaForm.vacuna_id) {
+      setMsgVacuna('Completa los campos requeridos');
+      return;
+    }
+    try {
+      const res = await fetch('/api/vacunas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mascota_id: parseInt(vacunaForm.mascota_id),
+          vacuna_id: parseInt(vacunaForm.vacuna_id),
+          veterinario_id: usuario?.vet_id,
+          costo_cobrado: parseFloat(vacunaForm.costo_cobrado) || 0
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setMsgVacuna('✅ Vacuna aplicada — caché invalidado');
+      setVacunaForm({ mascota_id: '', vacuna_id: '', costo_cobrado: '' });
+    } catch (err: any) {
+      setMsgVacuna(`Error: ${err.message}`);
+    }
+  };
+
   return (
     <div className="min-h-screen p-6" style={{ backgroundColor: '#FFF8EE' }}>
 
@@ -148,6 +181,69 @@ export default function Mascotas() {
           {mascotas.length} resultado(s)
         </div>
       </div>
+
+      {usuario?.rol === 'veterinario' && (
+        <div className="mt-6 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold text-gray-800">Aplicar Vacuna</h2>
+            <button
+              onClick={() => setMostrarFormVacuna(!mostrarFormVacuna)}
+              className="text-sm px-3 py-1 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50"
+            >
+              {mostrarFormVacuna ? 'Ocultar' : 'Mostrar'}
+            </button>
+          </div>
+
+          {mostrarFormVacuna && (
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <label className="text-sm text-gray-600 mb-1 block">ID Mascota</label>
+                <input
+                  type="number"
+                  value={vacunaForm.mascota_id}
+                  onChange={e => setVacunaForm({...vacunaForm, mascota_id: e.target.value})}
+                  placeholder="ej: 1"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-600 mb-1 block">ID Vacuna</label>
+                <input
+                  type="number"
+                  value={vacunaForm.vacuna_id}
+                  onChange={e => setVacunaForm({...vacunaForm, vacuna_id: e.target.value})}
+                  placeholder="ej: 1"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-600 mb-1 block">Costo</label>
+                <input
+                  type="number"
+                  value={vacunaForm.costo_cobrado}
+                  onChange={e => setVacunaForm({...vacunaForm, costo_cobrado: e.target.value})}
+                  placeholder="ej: 350"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
+              <div className="col-span-3 flex items-center gap-4">
+                <button
+                  onClick={aplicarVacuna}
+                  className="px-6 py-2 rounded-lg font-semibold text-white"
+                  style={{ backgroundColor: '#F5C800' }}
+                >
+                  Aplicar Vacuna
+                </button>
+                {msgVacuna && (
+                  <span className={`text-sm ${msgVacuna.includes('✅') ? 'text-green-600' : 'text-red-500'}`}>
+                    {msgVacuna}
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
